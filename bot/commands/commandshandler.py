@@ -13,7 +13,6 @@ from commands.server.servericon import server_icon
 from commands.server.serverinfo import server_info
 from commands.fun.coinflip import coin_flip
 from commands.fun.leagueoflegends.lolgen import setup_lolgen_command
-from commands.fun.goanime_download import setup_goanime_command
 from commands.fun.leagueoflegends.league_link import setup_league_link_command
 from commands.fun.leagueoflegends.league_info import setup_league_info_command
 from commands.admin.prefix import setup_prefix_command
@@ -53,7 +52,6 @@ def setup_commands(bot):
     ping(bot)
     help(bot)
     coin_flip(bot)
-    setup_goanime_command(bot)
     setup_lolgen_command(bot)
     setup_league_link_command(bot)
     setup_league_info_command(bot)

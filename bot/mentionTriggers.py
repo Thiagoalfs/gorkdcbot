@@ -18,8 +18,4 @@ async def mention_triggers(bot, message):
                 await message.channel.send("um salve ai pro meu mano " + message.mentions[0].mention)
             return True
 
-        else:
-            await message.channel.send(respostas(), reference=message)
-            return True
-
     return False

@@ -1,4 +1,4 @@
-import discord, os, json
+import os, json
 
 async def languageservice(bot, ctx, commandpath, jsonfile):
     # Define a linguagem padrão
