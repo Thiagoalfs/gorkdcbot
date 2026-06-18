@@ -1,5 +1,5 @@
-import re, discord
-from generalFunctions import respostas, ytdlp
+import re
+from generalFunctions import ytdlp
 
 async def mention_triggers(bot, message):
     if bot.user in message.mentions:
