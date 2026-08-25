@@ -1,6 +1,0 @@
-{
-    "not_playing": "I'm not playing anything right now. Use !play.",
-    "paused_or_bugged": "The audio is paused or glitched.",
-    "embed_title": "🎵 Now Playing",
-    "requested_by": "Requested by: {user}"
-}

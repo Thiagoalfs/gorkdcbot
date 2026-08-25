@@ -1,6 +1,0 @@
-{
-    "current_account": "✅ Your currently linked LoL account is: `{riot_id}`",
-    "no_account": "❌ You don't have a linked LoL account. Use `{prefix}linkleague Name#TAG` to link it.",
-    "invalid_format": "❌ Use the correct format: `Name#TAG` (ex: Grok#NA1)",
-    "success": "✅ Account `{riot_id}` linked successfully!"
-}

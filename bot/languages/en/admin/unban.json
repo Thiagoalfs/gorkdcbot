@@ -1,8 +1,0 @@
-{
-    "success": "✅ {user} has been unbanned for: {reason}",
-    "not_found": "❌ User with ID `{id}` not found in the ban list.",
-    "error": "❌ An error occurred while trying to unban the user: {error}",
-    "no_permission": "❌ You do not have `Ban Members` permission to use this command.",
-    "missing_arg": "❌ Please provide the ID of the user you want to unban. Ex: `{prefix}unban <user_id> [reason]`",
-    "default_reason": "No reason provided."
-}

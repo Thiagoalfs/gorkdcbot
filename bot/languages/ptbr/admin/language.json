@@ -1,9 +1,0 @@
-{
-    "title": "🌍 Configuração de Idioma",
-    "description": "Selecione um idioma disponível:\n\n",
-    "current_language": "Idioma Atual: **{lang}**",
-    "footer": "Uso: {prefix}language <ptbr/en>",
-    "success_ptbr": "Idioma alterado para Português! 🇧🇷",
-    "success_en": "Language changed to English! 🇺🇸",
-    "no_permission": "❌ Você precisa da permissão de `Administrador` para alterar a linguagem."
-}

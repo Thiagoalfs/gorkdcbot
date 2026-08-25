@@ -1,6 +1,0 @@
-{
-    "current_prefix": "O prefixo atual é `{prefix}`. Use `{prefix}prefix <novo>` para mudar.",
-    "too_long": "O prefixo é muito longo! Máximo de 5 caracteres.",
-    "success": "✅ Prefixo alterado com sucesso para `{prefix}`",
-    "no_permission": "❌ Você precisa da permissão de `Administrador` para alterar o prefixo."
-}

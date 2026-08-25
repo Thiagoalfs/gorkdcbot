@@ -1,9 +1,0 @@
-{
-    "playing": "Now playing: ",
-    "no_url": "Please provide a link or song name.",
-    "no_vc": "You need to be in a voice channel!",
-    "joining_error": "Something went wrong: {e}",
-    "msg_loading1": "Loading",
-    "msg_loading2": "songs...",
-    "added_to_queue": "Added to queue: "
-}

@@ -1,9 +1,0 @@
-{
-    "title": "⚙️ Painel de Configuração",
-    "desc": "Aqui estão os comandos fundamentais para ajustar as preferências do bot neste servidor.",
-    "field_prefix": "🔡 Prefixo",
-    "field_prefix_desc": "Altera o caractere usado antes dos comandos.",
-    "field_lang": "🌍 Idioma",
-    "field_lang_desc": "Altera a linguagem das mensagens do bot.",
-    "footer": "Dica: Use {prefix}help <comando> para ver detalhes de uso."
-}

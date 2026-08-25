@@ -1,9 +1,0 @@
-{
-    "title": "⚙️ Configuration Panel",
-    "desc": "Here are the fundamental commands to adjust the bot's preferences on this server.",
-    "field_prefix": "🔡 Prefix",
-    "field_prefix_desc": "Changes the character used before commands.",
-    "field_lang": "🌍 Language",
-    "field_lang_desc": "Changes the bot's message language.",
-    "footer": "Tip: Use {prefix}help <command> to see usage details."
-}

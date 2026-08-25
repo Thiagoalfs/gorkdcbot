@@ -1,9 +1,0 @@
-{
-    "no_query": "❌ Você precisa informar o nome do anime! Ex: `{prefix}goanime Naruto`",
-    "searching": "🔍 Buscando por `{query}`...",
-    "not_found": "❌ Não encontrei nenhum anime com esse nome.",
-    "downloading": "⏳ Anime encontrado! Baixando o primeiro episódio, isso pode demorar...",
-    "uploading": "✅ Download concluído! Fazendo upload para o Litterbox...",
-    "success": "📺 **{title}** baixado com sucesso!\n🔗 Link: {link}\n⚠️ *O link expira em 1 hora.*",
-    "error": "❌ Ocorreu um erro ao processar o anime: {error}"
-}

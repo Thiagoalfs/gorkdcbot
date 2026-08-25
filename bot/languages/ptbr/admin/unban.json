@@ -1,8 +1,0 @@
-{
-    "success": "✅ {user} foi desbanido(a) por: {reason}",
-    "not_found": "❌ Usuário com ID `{id}` não encontrado na lista de banidos.",
-    "error": "❌ Ocorreu um erro ao tentar desbanir o usuário: {error}",
-    "no_permission": "❌ Você não tem permissão de `Banir Membros` para usar este comando.",
-    "missing_arg": "❌ Por favor, forneça o ID do usuário que você deseja desbanir. Ex: `{prefix}unban <ID_do_usuário> [razão]`",
-    "default_reason": "Nenhuma razão fornecida."
-}

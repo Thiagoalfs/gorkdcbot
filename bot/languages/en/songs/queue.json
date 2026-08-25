@@ -1,7 +1,0 @@
-{
-    "title": "📜 Music Queue",
-    "footer": "Page {current} of {total}",
-    "empty_queue": "The queue is empty.",
-    "empty_wallet": "The queue is emptier than my pockets.",
-    "now_playing": "🎶 **Now playing:** {title}\n\n"
-}
