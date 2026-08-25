@@ -37,14 +37,14 @@ class QueueView(View):
             await interaction.response.defer()
 
 def setup_queue_command(bot):
-    @bot.command(name="queue", aliases=["q", "fila"])
+    @bot.hybrid_command(name="queue", aliases=["q", "fila"], description="Mostra a fila de músicas atual do servidor")
     async def queue(ctx):
         state = song_queues.get(ctx.guild.id)
         
         if not state or not state['queue']:
             if state and state['current']:
-                return await ctx.send("A fila tá vazia.")
-            return await ctx.send("A fila tá mais vazia que meu bolso ze.")
+                return await ctx.send("A fila tá vazia.", ephemeral=True)
+            return await ctx.send("A fila tá mais vazia que meu bolso ze.", ephemeral=True)
 
         queue_list = state['queue']
         pages = [queue_list[i:i + 5] for i in range(0, len(queue_list), 5)]

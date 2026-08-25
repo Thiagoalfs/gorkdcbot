@@ -35,6 +35,13 @@ async def setup_hook():
     except Exception as e:
         print(f"[CACHE] Erro ao carregar caches no startup: {e}")
 
+    # Sincroniza os Slash Commands com o Discord
+    try:
+        synced = await bot.tree.sync()
+        print(f"[SLASH] {len(synced)} Slash Commands sincronizados com o Discord!")
+    except Exception as e:
+        print(f"[SLASH] Erro ao sincronizar Slash Commands: {e}")
+
 bot.setup_hook = setup_hook
 
 @bot.event

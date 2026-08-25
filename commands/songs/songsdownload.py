@@ -2,11 +2,9 @@ import discord, os, asyncio
 from generalFunctions import ytdlp, convert_mp3_ytdlp, upload_to_litterbox, BASE_DOWNLOAD_FOLDER
 
 def setup_songs_commands(bot):
-    @bot.command(name="baixe", aliases=["instale", "baixar", "download"])
-    async def baixe(ctx, formato: str = None, *, url: str = None):
-        if not formato or not url:
-            await ctx.send(f"Qual o link do que tu quer baixar? Sintaxe: `{ctx.prefix}baixe <mp3/mp4> <url>`")
-            return
+    @bot.hybrid_command(name="baixe", aliases=["instale", "baixar", "download"], description="Baixa uma música em mp3 ou vídeo em mp4")
+    async def baixe(ctx, formato: str, *, url: str):
+        await ctx.defer()
         
         baixe_path = os.path.join(BASE_DOWNLOAD_FOLDER, str(ctx.guild.id), "baixe")
 
@@ -28,27 +26,25 @@ def setup_songs_commands(bot):
         try:
             if "mp3" in formato.lower():
                 convert_mp3_ytdlp(ydl_opts)
-                await ctx.send("Baixando e convertendo pra mp3, calma ai um cadin...")
                 nome_final = await ytdlp(url, ydl_opts, folder=baixe_path)
             
             elif "mp4" in formato.lower():
                 ydl_opts['format'] = 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'
                 ydl_opts['merge_output_format'] = 'mp4'
-                await ctx.send("Baixando o vídeo em mp4, aguenta ai...")
-                nome_final = await ytdlp(url, ydl_opts, folder=baixe_path)
+                nome_arquivo = await ytdlp(url, ydl_opts, folder=baixe_path)
+                nome_final = nome_arquivo
 
                 tamanho_bytes = os.path.getsize(nome_final)
                 if tamanho_bytes > 8 * 1024 * 1024:
-                    await ctx.send(f"Vídeo muito grande ({tamanho_bytes/(1024*1024):.2f}MB). Fazendo upload para link externo...")
                     link = await upload_to_litterbox(nome_final)
                     if link:
-                        await ctx.send(f"Aqui está o link do seu vídeo: {link}")
+                        await ctx.send(f"📦 Vídeo muito grande ({tamanho_bytes/(1024*1024):.2f}MB). Link para download: {link}")
                     else:
-                        await ctx.send("Erro ao fazer upload para link externo.")
+                        await ctx.send("❌ Erro ao fazer upload para link externo.")
                     return
             
             else:
-                await ctx.send("Formato inválido. Use `mp3` ou `mp4`.")
+                await ctx.send("❌ Formato inválido. Use `mp3` ou `mp4`.", ephemeral=True)
                 return
 
             if nome_final and os.path.exists(nome_final):
@@ -56,7 +52,7 @@ def setup_songs_commands(bot):
                 
         except Exception as e:
             print(f"Erro detalhado no comando baixe: {e}")
-            await ctx.send(f"Erro ao processar: {type(e).__name__}.")
+            await ctx.send(f"❌ Erro ao processar: {type(e).__name__}.")
         finally:
             await asyncio.sleep(2)
             if nome_final and os.path.exists(nome_final):

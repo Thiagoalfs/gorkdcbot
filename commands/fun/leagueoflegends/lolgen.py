@@ -6,8 +6,12 @@ ROLES = ["Topo", "Selva", "Meio", "Atirador", "Suporte"]
 SUMMONERS = ["Flash", "Incendiar", "Teleporte", "Curar", "Barreira", "Exaustão", "Fantasma", "Purificar", "Golpear"]
 
 def setup_lolgen_command(bot):
-    @bot.command(name="lolgen")
-    async def lolgen(ctx, *, champion_input: str = None):
+    @bot.hybrid_command(
+        name="lolgen", 
+        description="Gera um desafio aleatório de campeão, rota, feitiços e itens do LoL"
+    )
+    async def lolgen(ctx, *, campeao: str = None):
+        await ctx.defer()
         lol_data = await fetch_ddragon_lol_data()
         if not lol_data:
             return await ctx.send("❌ Erro ao conectar com o Data Dragon da Riot Games.")
@@ -16,14 +20,13 @@ def setup_lolgen_command(bot):
         boots = lol_data["boots"]
         items = lol_data["items"]
         
-        # Se um campeão foi passado como argumento, tenta encontrá-lo
-        if champion_input:
+        if campeao:
             champion_obj = next(
-                (c for c in champions if c["name"].lower() == champion_input.lower() or c["id"].lower() == champion_input.lower()), 
+                (c for c in champions if c["name"].lower() == campeao.lower() or c["id"].lower() == campeao.lower()), 
                 None
             )
             if not champion_obj:
-                return await ctx.send(f"❌ Não encontrei o campeão `{champion_input}` na lista oficial da Riot Games.")
+                return await ctx.send(f"❌ Não encontrei o campeão `{campeao}` na lista oficial da Riot Games.")
         else:
             champion_obj = random.choice(champions)
         
@@ -32,7 +35,6 @@ def setup_lolgen_command(bot):
         
         selected_role = random.choice(ROLES)
         
-        # Feitiços de invocador
         if selected_role == "Selva":
             other_spells = [s for s in SUMMONERS if s != "Golpear"]
             selected_summoners = ["Golpear", random.choice(other_spells)]
@@ -41,7 +43,6 @@ def setup_lolgen_command(bot):
             non_smite_spells = [s for s in SUMMONERS if s != "Golpear"]
             selected_summoners = random.sample(non_smite_spells, 2)
         
-        # Sorteio de itens conforme a rota
         if selected_role == "Atirador":
             selected_items = random.sample(items, 6)
         elif selected_role == "Suporte":

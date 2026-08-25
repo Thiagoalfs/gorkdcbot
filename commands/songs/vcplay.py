@@ -41,18 +41,14 @@ def setup_vc_commands(bot):
             if guild_id in song_queues:
                 song_queues[guild_id]['current'] = None
 
-    @bot.command(name="play", aliases=["p"])
-    async def play(ctx, *, url: str = None):
-        if not url:
-            await ctx.send("Manda um link ou nome de música aí, pit!")
-            return
-
+    @bot.hybrid_command(name="play", aliases=["p"], description="Toca uma música ou playlist do YouTube no canal de voz")
+    async def play(ctx, *, url: str):
         voice_state = ctx.author.voice
         if not voice_state:
-            await ctx.send("Entra numa call aí primeiro!")
-            return
+            return await ctx.send("❌ Entra numa call aí primeiro!", ephemeral=True)
 
         channel = voice_state.channel
+        await ctx.defer()
         
         try:
             vc = ctx.voice_client
@@ -64,7 +60,7 @@ def setup_vc_commands(bot):
             elif vc.channel.id != channel.id:
                 await vc.move_to(channel)
         except Exception as e:
-            return await ctx.send(f"Deu ruim ao conectar na call: {e}")
+            return await ctx.send(f"❌ Deu ruim ao conectar na call: {e}")
 
         vcsongs_path = os.path.join(BASE_DOWNLOAD_FOLDER, str(ctx.guild.id), "vcsongs")
 
@@ -98,7 +94,7 @@ def setup_vc_commands(bot):
                 if 'entries' in info:
                     entries = list(info['entries'])
                     total_musicas = len(entries)
-                    msg_loading = await ctx.send(f"Carregando {total_musicas} músicas...")
+                    await ctx.send(f"⏳ Carregando {total_musicas} músicas da playlist...")
                     
                     first = entries.pop(0)
                     try:
@@ -111,7 +107,7 @@ def setup_vc_commands(bot):
                         
                         if vc.is_playing() or song_queues[ctx.guild.id]['current']:
                             song_queues[ctx.guild.id]['queue'].append(song_data)
-                            await ctx.send(f"Adicionado à fila: **{titulo_primeira}**")
+                            await ctx.send(f"➕ Adicionado à fila: **{titulo_primeira}**")
                         else:
                             song_queues[ctx.guild.id]['current'] = song_data
                             song_data['start_time'] = bot.loop.time()
@@ -121,13 +117,9 @@ def setup_vc_commands(bot):
                                 bot.loop.create_task(safe_delete(final_primeira))
                                 bot.loop.create_task(play_next(ctx))
                             vc.play(discord.FFmpegPCMAudio(final_primeira), after=after_p)
-                            await ctx.send(f"Tocando agora: **{titulo_primeira}**")
-                        
-                        try:
-                            await msg_loading.delete()
-                        except: pass
+                            await ctx.send(f"🎶 Tocando agora: **{titulo_primeira}**")
                     except Exception as e:
-                        await ctx.send(f"Erro ao carregar primeira música da playlist: {e}")
+                        await ctx.send(f"❌ Erro ao carregar primeira música da playlist: {e}")
 
                     async def bg_download(remaining_entries):
                         for entry in remaining_entries:
@@ -152,7 +144,6 @@ def setup_vc_commands(bot):
                     
                     bot.loop.create_task(bg_download(entries))
                 else:
-                    msg_loading = await ctx.send("Carregando música...", reference=ctx.message)
                     nome_final = await ytdlp(query, ydl_opts, folder=vcsongs_path)
                     titulo = info.get('title') or os.path.basename(nome_final).replace(".mp3", "")
                     duracao = info.get('duration', 0)
@@ -161,7 +152,7 @@ def setup_vc_commands(bot):
                     
                     if vc.is_playing() or song_queues[ctx.guild.id]['current']:
                         song_queues[ctx.guild.id]['queue'].append(song_data)
-                        await ctx.send(f"Adicionado à fila: **{titulo}**")
+                        await ctx.send(f"➕ Adicionado à fila: **{titulo}**")
                     else:
                         song_queues[ctx.guild.id]['current'] = song_data
                         song_data['start_time'] = bot.loop.time()
@@ -171,14 +162,10 @@ def setup_vc_commands(bot):
                             bot.loop.create_task(safe_delete(nome_final))
                             bot.loop.create_task(play_next(ctx))
                         vc.play(discord.FFmpegPCMAudio(nome_final), after=after_playing)
-                        await ctx.send(f"Tocando agora: **{titulo}**")
-                    
-                    try:
-                        await msg_loading.delete()
-                    except: pass
+                        await ctx.send(f"🎶 Tocando agora: **{titulo}**")
 
             except Exception as e:
-                await ctx.send(f"Deu ruim: {e}")
+                await ctx.send(f"❌ Deu ruim: {e}")
                 if 'nome_final' in locals() and nome_final and os.path.exists(nome_final):
                     try:
                         os.remove(nome_final)

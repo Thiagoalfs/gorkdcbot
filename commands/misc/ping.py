@@ -1,4 +1,4 @@
 def ping(bot):
-    @bot.command(name="ping")
+    @bot.hybrid_command(name="ping", description="Mostra a latência do bot")
     async def ping(ctx):
-        await ctx.send(f"Pong! {round(bot.latency * 1000)}ms")
+        await ctx.send(f"🏓 Pong! Latência: **{round(bot.latency * 1000)}ms**")

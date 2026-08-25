@@ -1,7 +1,7 @@
 import discord
 
 def server_icon(bot):
-    @bot.command(name="servericon")
+    @bot.hybrid_command(name="servericon", description="Mostra o ícone atual do servidor")
     async def server_icon(ctx):
         guild = ctx.guild
         icon_url = guild.icon.url if guild.icon else None
@@ -10,4 +10,4 @@ def server_icon(bot):
             embed.set_image(url=icon_url)
             await ctx.send(embed=embed)
         else:
-            await ctx.send(f"O servidor **{guild.name}** não tem ícone configurado.")
+            await ctx.send(f"O servidor **{guild.name}** não tem ícone configurado.", ephemeral=True)

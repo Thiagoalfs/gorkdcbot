@@ -17,15 +17,15 @@ def setup_nowplaying_command(bot):
         bar = "▬" * progress + "🔘" + "▬" * (size - progress - 1)
         return bar
 
-    @bot.command(name="nowplaying", aliases=["np", "tocando"])
+    @bot.hybrid_command(name="nowplaying", aliases=["np", "tocando"], description="Mostra a música que está tocando no momento")
     async def nowplaying(ctx):
         state = song_queues.get(ctx.guild.id)
         
         if not state or not state['current']:
-            return await ctx.send("Não tô tocando nada agora. Usa !play.")
+            return await ctx.send("Não tô tocando nada agora. Use `/play`.", ephemeral=True)
         
         if not ctx.voice_client or not ctx.voice_client.is_playing():
-             return await ctx.send("O som tá pausado ou bugou, ze.")
+             return await ctx.send("O som tá pausado ou bugou, ze.", ephemeral=True)
 
         current = state['current']
         

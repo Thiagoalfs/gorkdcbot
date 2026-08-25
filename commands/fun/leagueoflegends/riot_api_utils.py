@@ -4,7 +4,9 @@ import time
 
 _DDRAGON_CACHE = {
     "timestamp": 0,
-    "data": None
+    "data": None,
+    "champion_key_map": {},
+    "version": "14.24.1"
 }
 CACHE_TTL = 3600  # 1 hora de cache
 
@@ -47,11 +49,15 @@ async def fetch_ddragon_lol_data():
                     return _DDRAGON_CACHE["data"]
                 champs_json = await resp.json()
                 champions = []
+                key_map = {}
+
                 for c_id, c in champs_json.get("data", {}).items():
-                    champions.append({
+                    champ_info = {
                         "id": c["id"],       # ID para imagem (ex: MonkeyKing, Nunu, Aatrox)
                         "name": c["name"]     # Nome traduzido em pt_BR
-                    })
+                    }
+                    champions.append(champ_info)
+                    key_map[str(c["key"])] = champ_info
 
             # 3. Pega todos os itens e botas em pt_BR
             async with session.get(f"https://ddragon.leagueoflegends.com/cdn/{version}/data/pt_BR/item.json") as resp:
@@ -95,10 +101,22 @@ async def fetch_ddragon_lol_data():
             }
 
             _DDRAGON_CACHE["data"] = data
+            _DDRAGON_CACHE["champion_key_map"] = key_map
+            _DDRAGON_CACHE["version"] = version
             _DDRAGON_CACHE["timestamp"] = now
-            print(f"[DDRAGON] Dados do LoL atualizados com sucesso para o patch {version} ({len(champions)} campeoes, {len(boots)} botas, {len(items)} itens).")
+            print(f"[DDRAGON] Dados do LoL atualizados para o patch {version} ({len(champions)} campeoes, {len(boots)} botas, {len(items)} itens).")
             return data
 
     except Exception as e:
         print(f"[DDRAGON] Erro ao carregar dados do Data Dragon: {e}")
         return _DDRAGON_CACHE["data"]
+
+async def get_champion_by_key(key: int or str):
+    """Retorna o nome e ID do campeão a partir do ID numérico da Riot (ex: 555 -> Pyke)."""
+    await fetch_ddragon_lol_data()
+    return _DDRAGON_CACHE["champion_key_map"].get(str(key), {"id": "Unknown", "name": f"Campeão #{key}"})
+
+async def get_ddragon_version():
+    """Retorna a versão atual do patch do LoL."""
+    await fetch_ddragon_lol_data()
+    return _DDRAGON_CACHE.get("version", "15.1.1")

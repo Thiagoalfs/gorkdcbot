@@ -2,22 +2,20 @@ import discord
 from discord.ext import commands
 
 def setup_clear_command(bot):
-    @bot.command(name="clear", aliases=["limpar"])
+    @bot.hybrid_command(name="clear", aliases=["limpar"], description="Apaga um número de mensagens do chat (1 a 100)")
     @commands.has_permissions(manage_messages=True)
-    async def clear(ctx, amount: int = None):
-        if amount is None:
-            return await ctx.send(f"Uso correto: `{ctx.prefix}clear <quantidade>`", delete_after=5)
-        
+    async def clear(ctx, amount: int = 10):
         if amount < 1 or amount > 100:
-            return await ctx.send("Você só pode apagar entre 1 e 100 mensagens por vez.", delete_after=5)
+            return await ctx.send("Você só pode apagar entre 1 e 100 mensagens por vez.", ephemeral=True)
 
-        # Somamos 1 ao limite para apagar também a mensagem que disparou o comando
-        deleted = await ctx.channel.purge(limit=amount + 1)
+        # Se for comando de prefixo, apagamos a mensagem do comando também
+        limit = amount if ctx.interaction else amount + 1
+        deleted = await ctx.channel.purge(limit=limit)
+        count = len(deleted) if ctx.interaction else max(0, len(deleted) - 1)
         
-        # Enviamos uma confirmação que se auto-deleta em 5 segundos para manter o chat limpo
-        await ctx.send(f"✅ Removi {len(deleted) - 1} mensagens.", delete_after=5)
+        await ctx.send(f"✅ Removi **{count}** mensagens.", ephemeral=True)
 
     @clear.error
     async def clear_error(ctx, error):
         if isinstance(error, commands.MissingPermissions):
-            await ctx.send("❌ Você não tem permissão de `Gerenciar Mensagens` para usar este comando.", delete_after=5)
+            await ctx.send("❌ Você não tem permissão de `Gerenciar Mensagens` para usar este comando.", ephemeral=True)

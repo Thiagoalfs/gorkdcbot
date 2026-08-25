@@ -5,15 +5,15 @@ from commands.songs.vcplay import song_queues
 from generalFunctions import BASE_DOWNLOAD_FOLDER
 
 def setup_stop_command(bot):
-    @bot.command(name="stop", aliases=["parar", "sair", "dc"])
+    @bot.hybrid_command(name="stop", aliases=["parar", "sair", "dc"], description="Para a reprodução e desconecta o bot da call")
     async def stop(ctx):
         guild_id = ctx.guild.id
 
         if not ctx.voice_client:
-            return await ctx.send("Eu nem tô em call nenhuma, ze.")
+            return await ctx.send("Eu nem tô em call nenhuma, ze.", ephemeral=True)
 
         if not ctx.author.voice or ctx.author.voice.channel != ctx.voice_client.channel:
-            return await ctx.send("Tu tem que tá na call pra me parar, pnc.")
+            return await ctx.send("Tu tem que tá na call pra me parar, pnc.", ephemeral=True)
 
         if ctx.voice_client.is_playing():
             ctx.voice_client.stop()
@@ -33,4 +33,4 @@ def setup_stop_command(bot):
         except Exception as e:
             print(f"[ERROR] Falha ao limpar pasta do servidor {guild_id}: {e}")
 
-        await ctx.send("Flw!")
+        await ctx.send("👋 Flw!")
