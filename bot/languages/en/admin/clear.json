@@ -1,6 +1,0 @@
-{
-    "usage": "Correct usage: `{prefix}clear <amount>`",
-    "limit_error": "You can only delete between 1 and 100 messages at a time.",
-    "success": "✅ Removed {count} messages.",
-    "no_permission": "❌ You do not have `Manage Messages` permission to use this command."
-}

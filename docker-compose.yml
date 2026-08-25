@@ -1,0 +1,9 @@
+services:
+  gorkbot:
+    build: .
+    container_name: gorkbot
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./downloadedsongs:/app/downloadedsongs

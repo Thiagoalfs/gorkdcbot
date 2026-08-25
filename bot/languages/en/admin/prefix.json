@@ -1,6 +1,0 @@
-{
-    "current_prefix": "The current prefix is `{prefix}`. Use `{prefix}prefix <new>` to change it.",
-    "too_long": "The prefix is too long! Maximum of 5 characters.",
-    "success": "✅ Prefix successfully changed to `{prefix}`",
-    "no_permission": "❌ You need `Administrator` permission to change the prefix."
-}

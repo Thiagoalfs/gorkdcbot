@@ -1,6 +1,0 @@
-{
-    "current_account": "✅ Sua conta do LoL vinculada atualmente é: `{riot_id}`",
-    "no_account": "❌ Você não tem uma conta do LoL vinculada. Use `{prefix}linkleague Nome#TAG` para vincular.",
-    "invalid_format": "❌ Use o formato correto: `Nome#TAG` (ex: Grok#BR1)",
-    "success": "✅ Conta `{riot_id}` vinculada com sucesso!"
-}

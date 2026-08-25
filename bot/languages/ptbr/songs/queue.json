@@ -1,7 +1,0 @@
-{
-    "title": "📜 Fila de Músicas",
-    "footer": "Página {current} de {total}",
-    "empty_queue": "a fila tá vazia",
-    "empty_wallet": "a fila tá mais vazia que meu bolso ze",
-    "now_playing": "🎶 **Tocando agora:** {title}\n\n"
-}

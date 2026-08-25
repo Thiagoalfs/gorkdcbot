@@ -1,10 +1,6 @@
-discord.py
+discord.py[voice]
 yt-dlp
 aiohttp
 python-dotenv
 aiomysql
-PyMySQL
-pynacl
-cloudscraper
-bs4
 cryptography
