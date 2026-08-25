@@ -16,15 +16,10 @@ def setup_vc_commands(bot):
             print(f"Aviso ao deletar arquivo temporario {file_path}: {e}")
 
     async def play_next(ctx):
-        responses = await languageservice(bot, ctx, "songs", "vcplay.json")
-
         guild_id = ctx.guild.id
         if guild_id not in song_queues or not song_queues[guild_id]['queue']:
             if guild_id in song_queues:
                 song_queues[guild_id]['current'] = None
-            return
-
-        next_song = song_queues[guild_id]['queue'].pop(0)
             return
 
         next_song = song_queues[guild_id]['queue'].pop(0)

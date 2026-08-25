@@ -1,17 +1,79 @@
+# =====================================
+# Byte-compiled / optimized / DLL files
+# =====================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# =====================================
+# Environments & Secrets
+# =====================================
 .env
-/bot/__pycache__
-/bot/commands/__pycache__
-/bot/src/badWordResponses.json
-/bot/src/badWords.json
-.vscode/settings.json
-/bot/commands/songs/__pycache__
-/bot/songs
-/bot/commands/misc/__pycache__
-/bot/commands/server/__pycache__
-/bot/commands/user/__pycache__
-/bot/tempCodeRunnerFile.py
-/bot/hiddentriggers
-/bot/downloadedsongs
-/bot/commands/admin/__pycache__
-/bot/commands/fun/__pycache__
-/bot/commands/fun/leagueoflegends/__pycache__
+.env.*
+!.env.example
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# =====================================
+# IDEs and Code Editors
+# =====================================
+.vscode/
+*.code-workspace
+.idea/
+*.swp
+*.swo
+*~
+*.bak
+tempCodeRunnerFile.py
+**/tempCodeRunnerFile.py
+
+# =====================================
+# Bot Data, Audio Downloads & Cache
+# =====================================
+downloadedsongs/
+**/downloadedsongs/
+songs/
+**/songs/
+hiddentriggers/
+bot/
+**/badWordResponses.json
+**/badWords.json
+*.mp3
+*.mp4
+*.m4a
+*.webm
+*.opus
+*.wav
+
+# =====================================
+# Logs and Databases
+# =====================================
+*.log
+*.sqlite3
+*.db
+
+# =====================================
+# Distribution / Packaging
+# =====================================
+build/
+dist/
+*.egg-info/
+*.egg
+
+# =====================================
+# OS generated files
+# =====================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
