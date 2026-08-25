@@ -68,19 +68,19 @@ HELP_DATABASE = {
         "sintaxe": "gambling"
     },
     "lolgen": {
-        "icon": "🎲", "categoria": "Diversão", "nome": "Comando lolgen",
+        "icon": "⚔️", "categoria": "LOL", "nome": "Comando lolgen",
         "aliases": [],
         "descricao": "Gera um desafio aleatório de campeão, rota, feitiços e itens de League of Legends.",
         "sintaxe": "lolgen [campeão]"
     },
     "leaguelink": {
-        "icon": "🎲", "categoria": "Diversão", "nome": "Comando leaguelink",
+        "icon": "⚔️", "categoria": "LOL", "nome": "Comando leaguelink",
         "aliases": ["vincularlol", "linkleague", "lollink", "linklol"],
         "descricao": "Vincula sua conta Riot (Nome#TAG) ao seu perfil no Discord.",
         "sintaxe": "leaguelink Nome#TAG"
     },
     "leagueinfo": {
-        "icon": "🎲", "categoria": "Diversão", "nome": "Comando leagueinfo",
+        "icon": "⚔️", "categoria": "LOL", "nome": "Comando leagueinfo",
         "aliases": ["lol", "lolstats", "lolprofile", "leagueprofile"],
         "descricao": "Mostra elo, estatísticas e maestria de League of Legends do usuário.",
         "sintaxe": "leagueinfo [@membro]"
@@ -142,15 +142,25 @@ def setup_help_command(bot):
             embed = discord.Embed(title="🔎 Lista de Comandos", color=discord.Color.blue())
             if ctx.guild and ctx.guild.icon:
                 embed.set_thumbnail(url=ctx.guild.icon.url)
-                
-            embed.add_field(name="🎶 Músicas", value="play\nstop\nskip\nqueue\nnowplaying\ndownload", inline=True)
-            embed.add_field(name="👤 Usuário", value="avatar\nuserinfo", inline=True)
-            embed.add_field(name="📌 Miscelâneas", value="ping", inline=True)
-            embed.add_field(name="🪄 Server", value="servericon\nserverinfo", inline=True)
-            embed.add_field(name="🎲 Diversão", value="coinflip\ngambling\nlolgen\nleaguelink\nleagueinfo", inline=True)
-            
-            if ctx.author.guild_permissions.administrator:
-                embed.add_field(name="⚙️ Admin", value="prefix\nconfig\nclear\nban\nkick\nunban", inline=True)
+
+            # Agrupa os comandos por categoria a partir do HELP_DATABASE
+            categories = {}
+            for cmd_name, data in HELP_DATABASE.items():
+                cat = data.get("categoria", "Outros")
+                icon = data.get("icon", "📌")
+                if cat not in categories:
+                    categories[cat] = {"icon": icon, "commands": []}
+                categories[cat]["commands"].append(cmd_name)
+
+            is_admin = getattr(ctx.author.guild_permissions, "administrator", False) if ctx.guild else False
+
+            for cat_name, cat_data in categories.items():
+                if cat_name.lower() == "admin" and not is_admin:
+                    continue
+
+                field_name = f"{cat_data['icon']} {cat_name}"
+                field_value = "\n".join(cat_data["commands"])
+                embed.add_field(name=field_name, value=field_value, inline=True)
 
             embed.set_footer(text=f"Use {ctx.prefix}help <comando> para detalhes")
             return await ctx.send(embed=embed)
