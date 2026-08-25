@@ -1,9 +1,21 @@
 services:
   gorkbot:
+    # Se você quiser compilar localmente ou usar a imagem do GitHub Container Registry:
     build: .
+    image: ghcr.io/thiagoalfs/gorkdcbot:latest
     container_name: gorkbot
     restart: unless-stopped
     env_file:
       - .env
     volumes:
       - ./downloadedsongs:/app/downloadedsongs
+
+  # O Watchtower monitora o GitHub e atualiza o container sozinho sem você fazer nada!
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    # Checa a cada 60 segundos por versões novas e apaga imagens antigas
+    command: --interval 60 --cleanup gorkbot
