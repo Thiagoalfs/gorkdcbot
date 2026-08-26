@@ -37,8 +37,8 @@ tempCodeRunnerFile.py
 # =====================================
 downloadedsongs/
 **/downloadedsongs/
-songs/
-**/songs/
+/songs/
+bot/songs/
 hiddentriggers/
 bot/
 **/badWordResponses.json

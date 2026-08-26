@@ -120,3 +120,29 @@ async def get_ddragon_version():
     """Retorna a versão atual do patch do LoL."""
     await fetch_ddragon_lol_data()
     return _DDRAGON_CACHE.get("version", "15.1.1")
+
+_CHAMP_DETAIL_CACHE = {}
+
+async def fetch_champion_detail(champ_id: str):
+    """Busca os detalhes completos de um campeão específico (incluindo enemytips) em pt_BR."""
+    if champ_id in _CHAMP_DETAIL_CACHE:
+        return _CHAMP_DETAIL_CACHE[champ_id]
+
+    version = await get_ddragon_version()
+    url = f"https://ddragon.leagueoflegends.com/cdn/{version}/data/pt_BR/champion/{champ_id}.json"
+
+    try:
+        timeout = aiohttp.ClientTimeout(total=10)
+        async with aiohttp.ClientSession(timeout=timeout) as session:
+            async with session.get(url) as resp:
+                if resp.status == 200:
+                    data = await resp.json()
+                    detail = data.get("data", {}).get(champ_id, {})
+                    if detail:
+                        _CHAMP_DETAIL_CACHE[champ_id] = detail
+                    return detail
+                print(f"[DDRAGON] Erro ao buscar detalhes de {champ_id}: status {resp.status}")
+                return None
+    except Exception as e:
+        print(f"[DDRAGON] Falha ao requisitar detalhes do campeão {champ_id}: {e}")
+        return None
