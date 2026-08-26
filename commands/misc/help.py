@@ -103,12 +103,6 @@ HELP_DATABASE = {
         "descricao": "Mostra informações da partida ao vivo do jogador (times, campeões, bans, modo e tempo de jogo).",
         "sintaxe": "lolgame [@membro / Nome#TAG]"
     },
-    "counter": {
-        "icon": "⚔️", "categoria": "LOL", "nome": "Comando counter",
-        "aliases": ["counters", "contra"],
-        "descricao": "Mostra dicas oficiais de como counterar um campeão, fraquezas e links de matchups no OP.GG e U.GG.",
-        "sintaxe": "counter <campeão>"
-    },
     "servericon": {
         "icon": "🪄", "categoria": "Server", "nome": "Comando servericon",
         "aliases": [],
