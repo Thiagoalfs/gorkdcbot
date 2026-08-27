@@ -19,18 +19,6 @@ HELP_DATABASE = {
         "descricao": "Para de tocar músicas e sai da call.",
         "sintaxe": "stop"
     },
-    "pause": {
-        "icon": "🎶", "categoria": "Músicas", "nome": "Comando pause",
-        "aliases": ["pausar"],
-        "descricao": "Pausa a música que está tocando no momento.",
-        "sintaxe": "pause"
-    },
-    "resume": {
-        "icon": "🎶", "categoria": "Músicas", "nome": "Comando resume",
-        "aliases": ["despausar", "continuar", "unpause"],
-        "descricao": "Retoma a reprodução da música pausada.",
-        "sintaxe": "resume"
-    },
     "nowplaying": {
         "icon": "🎶", "categoria": "Músicas", "nome": "Comando nowplaying",
         "aliases": ["np", "tocando"],
@@ -79,29 +67,17 @@ HELP_DATABASE = {
         "descricao": "Gira a roleta de emojis do cassino.",
         "sintaxe": "gambling"
     },
-    "lolgen": {
-        "icon": "⚔️", "categoria": "LOL", "nome": "Comando lolgen",
-        "aliases": [],
-        "descricao": "Gera um desafio aleatório de campeão, rota, feitiços e itens de League of Legends.",
-        "sintaxe": "lolgen [campeão]"
+    "giveaway": {
+        "icon": "🎉", "categoria": "Miscelâneas", "nome": "Comando giveaway",
+        "aliases": ["sorteio"],
+        "descricao": "Inicia um sorteio no canal indicado com tempo personalizável (segundos, minutos, horas, dias, meses) e contagem de participantes em tempo real via reação.",
+        "sintaxe": "giveaway <#canal> <título> <descrição> <tempo> <medida>"
     },
-    "leaguelink": {
-        "icon": "⚔️", "categoria": "LOL", "nome": "Comando leaguelink",
-        "aliases": ["vincularlol", "linkleague", "lollink", "linklol"],
-        "descricao": "Vincula sua conta Riot (Nome#TAG) ao seu perfil no Discord.",
-        "sintaxe": "leaguelink Nome#TAG"
-    },
-    "leagueinfo": {
-        "icon": "⚔️", "categoria": "LOL", "nome": "Comando leagueinfo",
-        "aliases": ["lol", "lolstats", "lolprofile", "leagueprofile"],
-        "descricao": "Mostra elo, estatísticas e maestria de League of Legends do usuário.",
-        "sintaxe": "leagueinfo [@membro]"
-    },
-    "lolgame": {
-        "icon": "⚔️", "categoria": "LOL", "nome": "Comando lolgame",
-        "aliases": ["partida", "game", "livegame", "ingame"],
-        "descricao": "Mostra informações da partida ao vivo do jogador (times, campeões, bans, modo e tempo de jogo).",
-        "sintaxe": "lolgame [@membro / Nome#TAG]"
+    "league": {
+        "icon": "⚔️", "categoria": "LOL", "nome": "Comando league",
+        "aliases": ["lol"],
+        "descricao": "Comandos de League of Legends. Subcomandos: info (ver perfil e elo), link (vincular conta Riot), gen (desafio de build aleatória).",
+        "sintaxe": "league <info|link|gen>"
     },
     "servericon": {
         "icon": "🪄", "categoria": "Server", "nome": "Comando servericon",

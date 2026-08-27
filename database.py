@@ -72,6 +72,26 @@ class Database:
         else:
             print("[DB] Tabela 'leagueconfig' ja existe. Ignorando criacao.")
 
+        # Tabela giveaways
+        if "giveaways" not in existing_tables:
+            print("[DB] Tabela 'giveaways' nao encontrada. Criando...")
+            await self.execute("""
+                CREATE TABLE giveaways (
+                    message_id BIGINT PRIMARY KEY,
+                    channel_id BIGINT NOT NULL,
+                    guild_id BIGINT NOT NULL,
+                    title VARCHAR(255) NOT NULL,
+                    description TEXT,
+                    end_time BIGINT NOT NULL,
+                    host_id BIGINT NOT NULL,
+                    ended BOOLEAN DEFAULT FALSE,
+                    winner_id BIGINT DEFAULT NULL
+                )
+            """)
+            print("[DB] Tabela 'giveaways' criada com sucesso.")
+        else:
+            print("[DB] Tabela 'giveaways' ja existe. Ignorando criacao.")
+
     async def execute(self, query, params=None):
         """Executa comandos como INSERT, UPDATE, DELETE."""
         for attempt in range(2):
