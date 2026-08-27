@@ -198,6 +198,8 @@ def setup_giveaway_command(bot):
         if canal is None or titulo is None or descricao is None or tempo is None:
             return await ctx.send(embed=build_help_embed(ctx.prefix), ephemeral=True)
 
+        await ctx.defer(ephemeral=True)
+
         unit = medida.lower().strip()
         multiplier = UNIT_MULTIPLIERS.get(unit)
         if not multiplier:
@@ -243,6 +245,7 @@ def setup_giveaway_command(bot):
         }
 
         asyncio.create_task(giveaway_timer(giveaway_msg.id, duration_seconds))
+        await ctx.send(f"✅ Sorteio de **{titulo}** iniciado com sucesso no canal {canal.mention}!", ephemeral=True)
 
     @giveaway.error
     async def giveaway_error(ctx, error):
@@ -254,7 +257,7 @@ def setup_giveaway_command(bot):
     # ----------------------------------------------------
     # EVENTOS DE REAÇÃO EM TEMPO REAL
     # ----------------------------------------------------
-    @bot.event
+    @bot.listen("on_raw_reaction_add")
     async def on_raw_reaction_add(payload):
         if bot.user and payload.user_id == bot.user.id:
             return
@@ -275,7 +278,7 @@ def setup_giveaway_command(bot):
                 except Exception as e:
                     print(f"[GIVEAWAY] Erro ao atualizar no reaction add: {e}")
 
-    @bot.event
+    @bot.listen("on_raw_reaction_remove")
     async def on_raw_reaction_remove(payload):
         if bot.user and payload.user_id == bot.user.id:
             return

@@ -37,17 +37,11 @@ HELP_DATABASE = {
         "descricao": "Baixa músicas ou vídeos. Caso o arquivo seja maior que 8MB, envia o link do Catbox.",
         "sintaxe": "download <mp3/mp4> <link/nome>"
     },
-    "avatar": {
-        "icon": "👤", "categoria": "Usuário", "nome": "Comando avatar",
-        "aliases": ["useravatar"],
-        "descricao": "Mostra o avatar do usuário mencionado ou o seu próprio.",
-        "sintaxe": "avatar [@membro]"
-    },
-    "userinfo": {
-        "icon": "👤", "categoria": "Usuário", "nome": "Comando userinfo",
-        "aliases": ["user"],
-        "descricao": "Mostra informações de cadastro e entrada do usuário no servidor.",
-        "sintaxe": "userinfo [@membro]"
+    "user": {
+        "icon": "👤", "categoria": "Usuário", "nome": "Comando user",
+        "aliases": ["usuario", "membro"],
+        "descricao": "Comandos de usuário e perfil. Subcomandos: avatar (ver imagem em HD e banner), info (ver ID, datas, cargos e estatísticas do membro).",
+        "sintaxe": "user <avatar|info> [@membro]"
     },
     "ping": {
         "icon": "📌", "categoria": "Miscelâneas", "nome": "Comando ping",
@@ -76,8 +70,8 @@ HELP_DATABASE = {
     "league": {
         "icon": "⚔️", "categoria": "LOL", "nome": "Comando league",
         "aliases": ["lol"],
-        "descricao": "Comandos de League of Legends. Subcomandos: info (ver perfil e elo), link (vincular conta Riot), gen (desafio de build aleatória).",
-        "sintaxe": "league <info|link|gen>"
+        "descricao": "Comandos de League of Legends. Subcomandos: profile (ver perfil e elo), game (partida ao vivo), link (vincular conta Riot), gen (desafio de build aleatória).",
+        "sintaxe": "league <profile|game|link|gen>"
     },
     "servericon": {
         "icon": "🪄", "categoria": "Server", "nome": "Comando servericon",
