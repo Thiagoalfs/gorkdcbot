@@ -41,18 +41,22 @@ def setup_songs_commands(bot):
     async def baixe(ctx, formato: str, *, url: str):
         fmt = formato.lower()
         if "mp3" not in fmt and "mp4" not in fmt:
-            return await ctx.send("❌ Formato inválido. Use `mp3` ou `mp4`.", ephemeral=True)
+            return await ctx.send("❌ Formato inválido. Use `mp3` ou `mp4`.", ephemeral=True, delete_after=10)
 
         url, was_cleaned, is_pure_playlist = clean_playlist_url(url)
         if is_pure_playlist:
             return await ctx.send(
                 "❌ Esse link é de uma playlist completa sem um vídeo principal. Envie o link direto de uma música ou vídeo!",
                 ephemeral=True,
+                delete_after=10,
             )
 
         await ctx.defer()
         if was_cleaned:
-            await ctx.send("ℹ️ Link de playlist/rádio detectado — limpei a URL para baixar apenas o arquivo principal.")
+            await ctx.send(
+                "ℹ️ Link de playlist/rádio detectado — limpei a URL para baixar apenas o arquivo principal.",
+                delete_after=10,
+            )
         
         baixe_path = os.path.join(BASE_DOWNLOAD_FOLDER, str(ctx.guild.id), "baixe")
 
@@ -88,7 +92,7 @@ def setup_songs_commands(bot):
                         if link:
                             await ctx.send(f"📦 Vídeo muito grande ({tamanho_bytes/(1024*1024):.2f}MB). Link para download: {link}")
                         else:
-                            await ctx.send("❌ Erro ao fazer upload para link externo.")
+                            await ctx.send("❌ Erro ao fazer upload para link externo.", delete_after=10)
                         return
 
                 if nome_final and os.path.exists(nome_final):
@@ -97,7 +101,7 @@ def setup_songs_commands(bot):
                 
         except Exception as e:
             print(f"Erro detalhado no comando baixe: {e}")
-            await ctx.send(f"❌ Erro ao processar: {type(e).__name__}.")
+            await ctx.send(f"❌ Erro ao processar: {type(e).__name__}.", delete_after=10)
         finally:
             await asyncio.sleep(2)
             if nome_final and os.path.exists(nome_final):
