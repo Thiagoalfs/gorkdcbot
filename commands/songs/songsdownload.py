@@ -2,7 +2,7 @@ import discord, os, asyncio
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 from discord import app_commands
 from utils.youtube import ytdlp, convert_mp3_ytdlp, BASE_DOWNLOAD_FOLDER
-from utils.litterbox import upload_to_litterbox
+from utils.gofile import upload_to_gofile
 from utils.feedback import processing_feedback
 
 
@@ -87,8 +87,8 @@ def setup_songs_commands(bot):
 
                     tamanho_bytes = os.path.getsize(nome_final)
                     if tamanho_bytes > 8 * 1024 * 1024:
-                        await status.update("☁️ Arquivo maior que 8MB, enviando para o Litterbox...")
-                        link = await upload_to_litterbox(nome_final)
+                        await status.update("☁️ Arquivo maior que 8MB, gerando link externo...")
+                        link = await upload_to_gofile(nome_final)
                         if link:
                             await ctx.send(f"📦 Vídeo muito grande ({tamanho_bytes/(1024*1024):.2f}MB). Link para download: {link}")
                         else:
