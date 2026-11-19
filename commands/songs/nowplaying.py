@@ -25,7 +25,7 @@ def setup_nowplaying_command(bot):
             return await ctx.send("Não tô tocando nada agora. Use `/play`.", ephemeral=True)
         
         if not ctx.voice_client or not ctx.voice_client.is_playing():
-             return await ctx.send("O som tá pausado ou bugou, ze.", ephemeral=True)
+            return await ctx.send("O som tá pausado ou bugou, ze.", ephemeral=True)
 
         current = state['current']
         

@@ -5,7 +5,7 @@ import aiohttp
 
 
 async def upload_to_litterbox(file_path):
-    """Faz upload para o Litterbox com expiração de 1 hora e nome aleatório."""
+    """Faz upload para o Litterbox com expiração de 12 horas e nome aleatório."""
     url = "https://litterbox.catbox.moe/resources/internals/api.php"
     if not os.path.exists(file_path):
         return None
@@ -18,7 +18,7 @@ async def upload_to_litterbox(file_path):
             with open(file_path, 'rb') as f:
                 data = aiohttp.FormData()
                 data.add_field('reqtype', 'fileupload')
-                data.add_field('time', '1h')  # Expira em 1 hora
+                data.add_field('time', '12h')  # Expira em 12 horas
                 data.add_field('fileToUpload', f, filename=random_name)
 
                 async with session.post(url, data=data) as response:

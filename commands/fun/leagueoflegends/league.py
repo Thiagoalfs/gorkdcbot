@@ -9,6 +9,7 @@ from commands.fun.leagueoflegends.riot_api_utils import (
     get_ddragon_version, 
     fetch_ddragon_lol_data
 )
+from utils.feedback import processing_feedback
 
 ROLES = ["Topo", "Selva", "Meio", "Atirador", "Suporte"]
 SUMMONERS = ["Flash", "Incendiar", "Teleporte", "Curar", "Barreira", "Exaustão", "Fantasma", "Purificar", "Golpear"]
@@ -82,42 +83,43 @@ def setup_league_commands(bot):
         name, tag = riot_id.rsplit("#", 1)
         name_encoded, tag_encoded = quote(name), quote(tag)
 
-        acc_data = await fetch_riot_api(f"https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{name_encoded}/{tag_encoded}")
-        if not acc_data: 
-            return await ctx.send(f"❌ Conta `{riot_id}` não encontrada. Verifique se o nome e a tag estão corretos. `/league link (Nome#TAG)`.")
-        puuid = acc_data['puuid']
+        async with processing_feedback(ctx, "⏳ Buscando perfil na Riot Games..."):
+            acc_data = await fetch_riot_api(f"https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{name_encoded}/{tag_encoded}")
+            if not acc_data: 
+                return await ctx.send(f"❌ Conta `{riot_id}` não encontrada. Verifique se o nome e a tag estão corretos. `/league link (Nome#TAG)`.")
+            puuid = acc_data['puuid']
 
-        summoner_data = await fetch_riot_api(f"https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{puuid}")
-        summoner_level = summoner_data.get('summonerLevel', 0) if summoner_data else 0
-        profile_icon_id = summoner_data.get('profileIconId', 1) if summoner_data else 1
+            summoner_data = await fetch_riot_api(f"https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{puuid}")
+            summoner_level = summoner_data.get('summonerLevel', 0) if summoner_data else 0
+            profile_icon_id = summoner_data.get('profileIconId', 1) if summoner_data else 1
 
-        league_data = await fetch_riot_api(f"https://br1.api.riotgames.com/lol/league/v4/entries/by-puuid/{puuid}")
-        
-        solo_rank = "Unranked"
-        flex_rank = "Unranked"
+            league_data = await fetch_riot_api(f"https://br1.api.riotgames.com/lol/league/v4/entries/by-puuid/{puuid}")
+            
+            solo_rank = "Unranked"
+            flex_rank = "Unranked"
 
-        if league_data:
-            for entry in league_data:
-                wins = entry['wins']
-                losses = entry['losses']
-                total = wins + losses
-                wr = (wins / total) * 100 if total > 0 else 0
-                
-                tier = entry['tier'].capitalize()
-                rank = entry['rank']
-                lp = entry['leaguePoints']
-                rank_str = f"**{tier} {rank}** ({lp} LP)\n`{wins}V {losses}D` • **{wr:.1f}% WR**"
-                
-                if entry['queueType'] == "RANKED_SOLO_5x5":
-                    solo_rank = rank_str
-                elif entry['queueType'] == "RANKED_FLEX_SR":
-                    flex_rank = rank_str
+            if league_data:
+                for entry in league_data:
+                    wins = entry['wins']
+                    losses = entry['losses']
+                    total = wins + losses
+                    wr = (wins / total) * 100 if total > 0 else 0
+                    
+                    tier = entry['tier'].capitalize()
+                    rank = entry['rank']
+                    lp = entry['leaguePoints']
+                    rank_str = f"**{tier} {rank}** ({lp} LP)\n`{wins}V {losses}D` • **{wr:.1f}% WR**"
+                    
+                    if entry['queueType'] == "RANKED_SOLO_5x5":
+                        solo_rank = rank_str
+                    elif entry['queueType'] == "RANKED_FLEX_SR":
+                        flex_rank = rank_str
 
-        mastery_data = await fetch_riot_api(f"https://br1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/{puuid}/top?count=3")
-        
-        patch_version = await get_ddragon_version()
-        masteries_list = []
-        top1_champ_img = ""
+            mastery_data = await fetch_riot_api(f"https://br1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/{puuid}/top?count=3")
+            
+            patch_version = await get_ddragon_version()
+            masteries_list = []
+            top1_champ_img = ""
 
         medals = ["🥇", "🥈", "🥉"]
 
@@ -210,14 +212,15 @@ def setup_league_commands(bot):
         name, tag = riot_id.rsplit("#", 1)
         name_encoded, tag_encoded = quote(name), quote(tag)
 
-        acc_data = await fetch_riot_api(f"https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{name_encoded}/{tag_encoded}")
-        if not acc_data:
-            return await ctx.send(f"❌ Conta `{riot_id}` não encontrada na Riot Games.")
-        puuid = acc_data['puuid']
+        async with processing_feedback(ctx, "⏳ Buscando partida ao vivo..."):
+            acc_data = await fetch_riot_api(f"https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{name_encoded}/{tag_encoded}")
+            if not acc_data:
+                return await ctx.send(f"❌ Conta `{riot_id}` não encontrada na Riot Games.")
+            puuid = acc_data['puuid']
 
-        game_data = await fetch_riot_api(f"https://br1.api.riotgames.com/lol/spectator/v5/active-games/by-summoner/{puuid}")
-        if not game_data:
-            return await ctx.send(f"❌ **{riot_id}** não está em nenhuma partida ativa no momento.")
+            game_data = await fetch_riot_api(f"https://br1.api.riotgames.com/lol/spectator/v5/active-games/by-summoner/{puuid}")
+            if not game_data:
+                return await ctx.send(f"❌ **{riot_id}** não está em nenhuma partida ativa no momento.")
 
         queue_id = game_data.get('gameQueueConfigId', 0)
         queue_name = QUEUE_TYPES.get(queue_id, game_data.get('gameMode', 'Personalizada'))
@@ -326,9 +329,10 @@ def setup_league_commands(bot):
     )
     async def gen(ctx, *, campeao: str = None):
         await ctx.defer()
-        lol_data = await fetch_ddragon_lol_data()
-        if not lol_data:
-            return await ctx.send("❌ Erro ao conectar com o Data Dragon da Riot Games.")
+        async with processing_feedback(ctx, "⏳ Gerando build aleatória..."):
+            lol_data = await fetch_ddragon_lol_data()
+            if not lol_data:
+                return await ctx.send("❌ Erro ao conectar com o Data Dragon da Riot Games.")
 
         champions = lol_data["champions"]
         boots = lol_data["boots"]
