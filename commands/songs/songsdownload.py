@@ -1,5 +1,6 @@
 import discord, os, asyncio
-from generalFunctions import ytdlp, convert_mp3_ytdlp, upload_to_litterbox, BASE_DOWNLOAD_FOLDER
+from utils.youtube import ytdlp, convert_mp3_ytdlp, BASE_DOWNLOAD_FOLDER
+from utils.litterbox import upload_to_litterbox
 
 def setup_songs_commands(bot):
     @bot.hybrid_command(name="baixe", aliases=["instale", "baixar", "download"], description="Baixa uma música em mp3 ou vídeo em mp4")

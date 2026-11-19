@@ -1,7 +1,7 @@
 import discord
 import os
 import asyncio
-from generalFunctions import extract_info, download_single_song, convert_mp3_ytdlp, ytdlp, BASE_DOWNLOAD_FOLDER
+from utils.youtube import extract_info, download_single_song, convert_mp3_ytdlp, ytdlp, BASE_DOWNLOAD_FOLDER
 
 song_queues = {}
 
@@ -15,6 +15,14 @@ def setup_vc_commands(bot):
         except Exception as e:
             print(f"Aviso ao deletar arquivo temporario {file_path}: {e}")
 
+    def make_after_playing(ctx, file_path):
+        def after_playing(error):
+            if error:
+                print(f"[AUDIO] Erro no player FFmpeg: {error}")
+            asyncio.run_coroutine_threadsafe(safe_delete(file_path), bot.loop)
+            asyncio.run_coroutine_threadsafe(play_next(ctx), bot.loop)
+        return after_playing
+
     async def play_next(ctx):
         guild_id = ctx.guild.id
         if guild_id not in song_queues or not song_queues[guild_id]['queue']:
@@ -26,15 +34,9 @@ def setup_vc_commands(bot):
         song_queues[guild_id]['current'] = next_song
         next_song['start_time'] = bot.loop.time()
 
-        def after_playing(error):
-            if error:
-                print(f"[AUDIO] Erro no player FFmpeg: {error}")
-            bot.loop.create_task(safe_delete(next_song['file']))
-            bot.loop.create_task(play_next(ctx))
-
         vc = ctx.voice_client
         if vc and vc.is_connected():
-            vc.play(discord.FFmpegPCMAudio(next_song['file']), after=after_playing)
+            vc.play(discord.FFmpegPCMAudio(next_song['file']), after=make_after_playing(ctx, next_song['file']))
             await ctx.send(f"Tocando agora: **{next_song['title']}**")
         else:
             await safe_delete(next_song['file'])
@@ -111,12 +113,7 @@ def setup_vc_commands(bot):
                         else:
                             song_queues[ctx.guild.id]['current'] = song_data
                             song_data['start_time'] = bot.loop.time()
-                            def after_p(e):
-                                if e:
-                                    print(f"[AUDIO] Erro no player FFmpeg: {e}")
-                                bot.loop.create_task(safe_delete(final_primeira))
-                                bot.loop.create_task(play_next(ctx))
-                            vc.play(discord.FFmpegPCMAudio(final_primeira), after=after_p)
+                            vc.play(discord.FFmpegPCMAudio(final_primeira), after=make_after_playing(ctx, final_primeira))
                             await ctx.send(f"🎶 Tocando agora: **{titulo_primeira}**")
                     except Exception as e:
                         await ctx.send(f"❌ Erro ao carregar primeira música da playlist: {e}")
@@ -156,12 +153,7 @@ def setup_vc_commands(bot):
                     else:
                         song_queues[ctx.guild.id]['current'] = song_data
                         song_data['start_time'] = bot.loop.time()
-                        def after_playing(error):
-                            if error:
-                                print(f"[AUDIO] Erro no player FFmpeg: {error}")
-                            bot.loop.create_task(safe_delete(nome_final))
-                            bot.loop.create_task(play_next(ctx))
-                        vc.play(discord.FFmpegPCMAudio(nome_final), after=after_playing)
+                        vc.play(discord.FFmpegPCMAudio(nome_final), after=make_after_playing(ctx, nome_final))
                         await ctx.send(f"🎶 Tocando agora: **{titulo}**")
 
             except Exception as e:

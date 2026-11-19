@@ -1,7 +1,7 @@
 from triggers.mentionTriggers import mention_triggers
 
 def message_triggers(bot):
-    @bot.event
+    @bot.listen("on_ready")
     async def on_ready():
         print(f"[BOT] Message triggers prontos para {bot.user}")
 

@@ -2,7 +2,7 @@ import os
 import shutil
 import asyncio
 from commands.songs.vcplay import song_queues
-from generalFunctions import BASE_DOWNLOAD_FOLDER
+from utils.youtube import BASE_DOWNLOAD_FOLDER
 
 def setup_stop_command(bot):
     @bot.hybrid_command(name="stop", aliases=["parar", "sair", "dc"], description="Para a reprodução e desconecta o bot da call")
@@ -25,10 +25,10 @@ def setup_stop_command(bot):
 
         await asyncio.sleep(0.5)
 
-        guild_folder = os.path.join(BASE_DOWNLOAD_FOLDER, str(guild_id))
+        vcsongs_folder = os.path.join(BASE_DOWNLOAD_FOLDER, str(guild_id), "vcsongs")
         try:
-            if os.path.exists(guild_folder):
-                shutil.rmtree(guild_folder)
+            if os.path.exists(vcsongs_folder):
+                shutil.rmtree(vcsongs_folder)
             print(f"[CLEANUP] Pasta de audio do servidor {guild_id} removida com sucesso.")
         except Exception as e:
             print(f"[ERROR] Falha ao limpar pasta do servidor {guild_id}: {e}")
