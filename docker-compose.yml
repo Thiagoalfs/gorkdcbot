@@ -1,10 +1,31 @@
 services:
+  mariadb:
+    image: mariadb:11
+    container_name: gorkbot-db
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${DB_NAME}
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASS}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-${DB_PASS}}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
   gorkbot:
     # Se você quiser compilar localmente ou usar a imagem do GitHub Container Registry:
     build: .
     image: ghcr.io/thiagoalfs/gorkdcbot:latest
     container_name: gorkbot
     restart: unless-stopped
+    depends_on:
+      mariadb:
+        condition: service_healthy
     env_file:
       - .env
     volumes:
@@ -19,3 +40,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     # Checa a cada 60 segundos por versões novas e apaga imagens antigas
     command: --interval 60 --cleanup gorkbot
+
+volumes:
+  mariadb_data:
